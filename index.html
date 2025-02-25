@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>WINNER: FAMILY TOURNAMENT</title>
     <link rel="stylesheet" href="src/index.css">
@@ -9,30 +10,43 @@
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Krona+One&family=Readex+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Krona+One&family=Readex+Pro:wght@400;700&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <div id="root"></div>
     <script type="text/babel">
         function App() {
             const [families, setFamilies] = React.useState([]);
             const [showBulkAdd, setShowBulkAdd] = React.useState(false);
-            const [newFamily, setNewFamily] = React.useState({ name: '', amount: '' });
+            const [newFamily, setNewFamily] = React.useState({
+                name: '',
+                amount: ''
+            });
             const [bulkNames, setBulkNames] = React.useState('');
             const [bulkAmounts, setBulkAmounts] = React.useState('');
+            const [tournamentType, setTournamentType] = React.useState('FAMILY'); // 'FAMILY' или 'WEEKLY'
 
             const addFamily = (e) => {
                 e.preventDefault();
                 if (newFamily.name && newFamily.amount) {
-                    setFamilies([...families, { ...newFamily, id: Date.now() }]);
-                    setNewFamily({ name: '', amount: '' });
+                    setFamilies([...families, {
+                        ...newFamily,
+                        id: Date.now()
+                    }]);
+                    setNewFamily({
+                        name: '',
+                        amount: ''
+                    });
                 }
             };
 
             const handleBulkAdd = () => {
                 const names = bulkNames.split('\n').filter(n => n.trim());
                 const amounts = bulkAmounts.split('\n').filter(a => a.trim());
-                
+
                 const newFamilies = names.map((name, index) => ({
                     id: Date.now() + index,
                     name: name.trim(),
@@ -52,57 +66,73 @@
             const sortedFamilies = [...families].sort((a, b) => b.amount - a.amount);
 
             const takeScreenshot = async () => {
-                const element = document.querySelector('.App');
-                try {
-                    // Ждем загрузки изображения
-                    await new Promise((resolve) => {
-                        const img = element.querySelector('.logo');
-                        if (img.complete) {
-                            resolve();
-                        } else {
-                            img.onload = resolve;
-                        }
-                    });
-
-                    const canvas = await html2canvas(element, {
-                        backgroundColor: '#121212',
-                        scale: 2,
-                        useCORS: true,
-                        allowTaint: true,
-                        ignoreElements: (element) => {
-                            return element.className === 'add-form' || 
-                                   element.className === 'bulk-add' ||
-                                   element.className === 'screenshot-button-container';
-                        }
-                    });
-                    
-                    canvas.toBlob(async (blob) => {
-                        try {
-                            await navigator.clipboard.write([
-                                new ClipboardItem({
-                                    'image/png': blob
-                                })
-                            ]);
-                            alert('Скриншот скопирован в буфер обмена!');
-                        } catch (err) {
-                            console.error('Ошибка при копировании в буфер обмена:', err);
-                            alert('Не удалось скопировать скриншот в буфер обмена');
-                        }
-                    }, 'image/png');
-                } catch (err) {
-                    console.error('Ошибка при создании скриншота:', err);
-                    alert('Не удалось создать скриншот');
+        const element = document.querySelector('.App');
+        try {
+            // Ждем загрузки изображения
+            await new Promise((resolve) => {
+                const img = element.querySelector('.logo');
+                if (img.complete) {
+                    resolve();
+                } else {
+                    img.onload = resolve;
                 }
+            });
+
+            const canvas = await html2canvas(element, {
+                backgroundColor: '#121212',
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                ignoreElements: (element) => {
+                    return element.className === 'add-form' ||
+                           element.className === 'bulk-add' ||
+                           element.className === 'screenshot-button-container' ||
+                           element.className === 'screenshot-exclude'; // Добавлено условие
+                }
+            });
+
+            canvas.toBlob(async (blob) => {
+                try {
+                    await navigator.clipboard.write([
+                        new ClipboardItem({
+                            'image/png': blob
+                        })
+                    ]);
+                    alert('Скриншот сделан, можно добавлять!');
+                } catch (err) {
+                    console.error('Ошибка при копировании в буфер обмена:', err);
+                    alert('Не удалось скопировать скриншот в буфер обмена');
+                }
+            }, 'image/png');
+        } catch (err) {
+            console.error('Ошибка при создании скриншота:', err);
+            alert('Не удалось создать скриншот');
+        }
+    };
+
+            const toggleTournamentType = () => {
+                setTournamentType(tournamentType === 'FAMILY' ? 'WEEKLY' : 'FAMILY');
+            };
+
+            const getTitle = () => {
+                return tournamentType === 'FAMILY' ? 'WINNER: FAMILY TOURNAMENT' : 'WINNER: WEEKLY CUP';
+            };
+
+            // Function to get the appropriate term based on tournament type
+            const getTeamOrFamilyTerm = () => {
+                return tournamentType === 'FAMILY' ? 'Семья' : 'Команда';
             };
 
             return (
                 <div className="App">
-                    <h1 style={{ fontFamily: "'Krona One', sans-serif" }}>WINNER: FAMILY TOURNAMENT</h1>
-                    
+                    <h1 style={{
+                        fontFamily: "'Krona One', sans-serif"
+                    }}>{getTitle()}</h1>
+
                     <div className="tournament-table">
                         <div className="table-header">
-                            <div>Семья</div>
-                            <div className="amount">Сумма</div>
+                            <div className="headeramount1">{getTeamOrFamilyTerm()}</div>
+                            <div className="headeramount2">Сумма</div>
                         </div>
                         {sortedFamilies.map(family => (
                             <div key={family.id} className="family-row">
@@ -114,65 +144,55 @@
                             </div>
                         ))}
                     </div>
+                
                     <div className="logo-container">
-                        <img 
-                            src="src/photo/logo.png"
-                            alt="Majestic Logo" 
-                            className="logo"
-                            crossOrigin="anonymous"
-                        />
+                        <img src="src/photo/logo.png" alt="Majestic Logo" className="logo" crossOrigin="anonymous" />
                     </div>
                     
                     <div className="screenshot-button-container">
-                        <button onClick={takeScreenshot}>
-                            Сделать скриншот
-                        </button>
+                        <button onClick={takeScreenshot}>Сделать скриншот</button>
                     </div>
-                    
+
                     {!showBulkAdd ? (
                         <form className="add-form" onSubmit={addFamily}>
-                            <input
-                                placeholder="Имя семьи"
-                                value={newFamily.name}
-                                onChange={e => setNewFamily({...newFamily, name: e.target.value})}
-                            />
-                            <input
-                                type="number"
-                                placeholder="Сумма"
-                                value={newFamily.amount}
-                                onChange={e => setNewFamily({...newFamily, amount: Number(e.target.value)})}
-                            />
+                            <input placeholder={"Имя " + getTeamOrFamilyTerm().toLowerCase()} value={newFamily.name} onChange={e => setNewFamily({
+                                ...newFamily,
+                                name: e.target.value
+                            })} />
+                            <input type="number" placeholder="Сумма" value={newFamily.amount} onChange={e => setNewFamily({
+                                ...newFamily,
+                                amount: Number(e.target.value)
+                            })} />
                             <button type="submit">Добавить</button>
                             <button type="button" onClick={() => setShowBulkAdd(true)}>
-                                Мссовое добавление
+                                Массовое добавление
                             </button>
                             <button type="button" onClick={clearAllFamilies}>
                                 Массовое удаление
                             </button>
+
                         </form>
+
                     ) : (
                         <div className="bulk-add">
-                            <textarea
-                                placeholder="Имена семей (каждое с новой строки)"
-                                value={bulkNames}
-                                onChange={e => setBulkNames(e.target.value)}
-                            />
-                            <textarea
-                                placeholder="Суммы (каждая с новой строки)"
-                                value={bulkAmounts}
-                                onChange={e => setBulkAmounts(e.target.value)}
-                            />
+                            <textarea placeholder={"Имена " + getTeamOrFamilyTerm().toLowerCase() + " (каждое с новой строки)"} value={bulkNames} onChange={e => setBulkNames(e.target.value)} />
+                            <textarea placeholder="Суммы (каждая с новой строки)" value={bulkAmounts} onChange={e => setBulkAmounts(e.target.value)} />
                             <div className="bulk-add-buttons">
-                                <button onClick={handleBulkAdd}>Добавить семью</button>
+                                <button onClick={handleBulkAdd}>Добавить {getTeamOrFamilyTerm().toLowerCase()}</button>
                                 <button onClick={() => setShowBulkAdd(false)}>Отмена</button>
                             </div>
                         </div>
                     )}
+                    <div className="screenshot-exclude">
+                    <button onClick={toggleTournamentType}>
+                        Сменить турнир на: {tournamentType === 'FAMILY' ? 'WEEKLY CUP' : 'FAMILY TOURNAMENT'}
+                    </button>
+                </div>
                 </div>
             );
         }
-
-        ReactDOM.render(<App />, document.getElementById('root'));
+        ReactDOM.render(< App />, document.getElementById('root'));
     </script>
 </body>
-</html> 
+
+</html>
