@@ -1,7 +1,31 @@
 @font-face {
+  font-style: normal;
+  font-family: 'Krona One';
+  src: url('../public/fonts/KronaOne-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'PROXIMA NOVA Bold'; /* Имя для Bold */
+    src: url('../public/fonts/PROXIMANOVA-BOLD.woff2') format('woff2'),
+         url('../public/fonts/PROXIMANOVA-BOLD.woff') format('woff');
+    font-weight: bold; /* Указываем, что это жирное начертание */
     font-style: normal;
-    font-family: 'Krona One';
-    src: url('../public/fonts/KronaOne-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'PROXIMA NOVA Semibold'; /* Имя для Semibold */
+    src: url('../public/fonts/PROXIMANOVA-SEMIBOLD.woff2') format('woff2'),
+         url('../public/fonts/PROXIMANOVA-SEMIBOLD.woff') format('woff');
+    font-weight: 600; /*  Указываем вес шрифта для semibold */
+    font-style: normal;
+}
+
+@font-face {
+  font-family: 'Readex Pro Medium';
+  src: url('../public/fonts/ReadexPro-Medium.woff2') format('woff2'),
+       url('../public/fonts/ReadexPro-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
 }
 
 body {
@@ -25,6 +49,8 @@ h1 {
   font-family: 'Krona One', sans-serif;
   font-size: 35px;
 }
+
+
 
 .tournament-table {
   border-radius: 16px;
@@ -64,7 +90,33 @@ h1 {
   text-align: right;
   color: #9C9C9C;
   padding-right: 10px;
+  font-size: 20px;        /* Размер 30px */
+  font-family: 'PROXIMA NOVA Semibold', sans-serif;  /* Применяем semibold */
+  font-weight: 600;      /*  Убеждаемся, что шрифт отображается semibold */
+}
+
+.family-name {
+  padding-left: 10px;
+  color: #FFFFFF;
+  font-size: 20px;        /* Размер 28px */
+  font-family: 'PROXIMA NOVA Bold', sans-serif;  /* Применяем жирное начертание */
+  font-weight: bold;      /* Убеждаемся, что шрифт отображается жирным */
+}
+
+.headeramount1 {
+  color: #9C9C9C;
+  padding-left: 15px;
   font-size: 20px;
+  font-family: 'Readex Pro Medium', sans-serif;
+  font-weight: 500;
+}
+
+.headeramount2 {
+  padding-left: 148px;
+  color: #9C9C9C;
+  font-size: 20px;
+  font-family: 'Readex Pro Medium', sans-serif;
+  font-weight: 500;
 }
 
 .amount .currency {
@@ -72,16 +124,11 @@ h1 {
   color: #69F129;
 }
 
-.family-name {
-  padding-left: 10px;
-  color: #FFFFFF;
-  font-size: 20px;
-}
 
 .actions {
   display: flex;
   background: #1e1e1e;
-  margin-left: 20px;
+  margin-left: 25px;
 }
 
 button {
@@ -145,7 +192,7 @@ input, textarea {
 .screenshot-button-container {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  margin-top: -30px;
   padding: 20px;
 }
 
@@ -163,11 +210,11 @@ input, textarea {
 .screenshot-button-container button:hover {
   background: #444;
 }
- 
+
 input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        -moz-appearance: textfield;
-        background: #0a377e;
-        margin: 0;
-    }
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  background: #0a377e;
+  margin: 0;
+}
