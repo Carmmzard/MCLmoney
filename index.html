@@ -154,7 +154,7 @@
 
                     {!showBulkAdd ? (
                         <form className="add-form" onSubmit={addFamily}>
-                            <input placeholder={"Имя " + getTeamOrFamilyTerm().toLowerCase()} value={newFamily.name} onChange={e => setNewFamily({
+                            <input placeholder={getTeamOrFamilyTerm().toLowerCase()} value={newFamily.name} onChange={e => setNewFamily({
                                 ...newFamily,
                                 name: e.target.value
                             })} />
