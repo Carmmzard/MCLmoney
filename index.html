@@ -136,8 +136,14 @@
                         </div>
                         {sortedFamilies.map(family => (
                             <div key={family.id} className="family-row">
-                                <div className="family-name">{family.name}</div>
-                                <div className="amount">
+                                <div className="family-name" style={{
+                                    fontFamily: "'Readex Pro', sans-serif"
+                                }}>
+                                    {family.name}
+                                </div>
+                                <div className="amount" style={{
+                                    fontFamily: "'Readex Pro', sans-serif"
+                                }}>
                                     {family.amount.toLocaleString()}
                                     <span className="currency"> $</span>
                                 </div>
@@ -155,7 +161,7 @@
 
                     {!showBulkAdd ? (
                         <form className="add-form" onSubmit={addFamily}>
-                            <input placeholder={getTeamOrFamilyTerm().toLowerCase()} value={newFamily.name} onChange={e => setNewFamily({
+                            <input placeholder={getTeamOrFamilyTerm()} value={newFamily.name} onChange={e => setNewFamily({
                                 ...newFamily,
                                 name: e.target.value
                             })} />
