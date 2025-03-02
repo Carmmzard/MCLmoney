@@ -10,9 +10,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Krona+One&family=Readex+Pro:wght@400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Krona+One&family=Readex+Pro:wght@400;500;700&display=swap"
         rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Allerta&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -27,7 +27,13 @@
             });
             const [bulkNames, setBulkNames] = React.useState('');
             const [bulkAmounts, setBulkAmounts] = React.useState('');
-            const [tournamentType, setTournamentType] = React.useState('FAMILY'); // 'FAMILY' или 'WEEKLY'
+            const [tournamentType, setTournamentType] = React.useState('FAMILY'); // 'FAMILY', 'WEEKLY' или 'PUBG'
+
+            const [staticPUBGData, setStaticPUBGData] = React.useState([
+                { place: 1, name: '', bonusAmount: 1000, amount: '', icon: 'src/Top1.svg', backgroundColor: 'rgba(255, 199, 0, 0.2)' },
+                { place: 2, name: '', bonusAmount: 500, amount: '', icon: 'src/Top2.svg', backgroundColor: 'rgba(255, 255, 255, 0.1)' },
+                { place: 3, name: '', bonusAmount: 0, amount: '', icon: 'src/Top3.svg', backgroundColor: 'rgba(255, 126, 0, 0.2)' }
+            ]);
 
             const addFamily = (e) => {
                 e.preventDefault();
@@ -111,44 +117,129 @@
     };
 
             const toggleTournamentType = () => {
-                setTournamentType(tournamentType === 'FAMILY' ? 'WEEKLY' : 'FAMILY');
+                if (tournamentType === 'FAMILY') {
+                    setTournamentType('WEEKLY');
+                } else if (tournamentType === 'WEEKLY') {
+                    setTournamentType('PUBG');
+                } else {
+                    setTournamentType('FAMILY');
+                }
             };
 
             const getTitle = () => {
-                return tournamentType === 'FAMILY' ? 'WINNER: FAMILY TOURNAMENT' : 'WINNER: WEEKLY CUP';
+                switch(tournamentType) {
+                    case 'FAMILY':
+                        return 'WINNER: FAMILY TOURNAMENT';
+                    case 'WEEKLY':
+                        return 'WINNER: WEEKLY CUP';
+                    case 'PUBG':
+                        return 'WINNER: PUBG';
+                    default:
+                        return 'WINNER: FAMILY TOURNAMENT';
+                }
             };
 
-            // Function to get the appropriate term based on tournament type
             const getTeamOrFamilyTerm = () => {
-                return tournamentType === 'FAMILY' ? 'Семья' : 'Команда';
+                switch(tournamentType) {
+                    case 'FAMILY':
+                        return 'Семья';
+                    case 'WEEKLY':
+                        return 'Команда';
+                    case 'PUBG':
+                        return 'Команда';
+                    default:
+                        return 'Семья';
+                }
+            };
+
+            const updatePUBGTeam = (index, field, value) => {
+                const newData = [...staticPUBGData];
+                newData[index] = {
+                    ...newData[index],
+                    [field]: field === 'amount' ? Number(value) : value
+                };
+                setStaticPUBGData(newData);
+            };
+
+            const formatNumber = (number) => {
+                if (!number) return '';
+                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
             };
 
             return (
                 <div className="App">
-                    <h1 style={{
-                        fontFamily: "'Krona One', sans-serif"
-                    }}>{getTitle()}</h1>
+                    <h1 className="main-title">{getTitle()}</h1>
 
                     <div className="tournament-table">
-                        <div className="table-header">
-                            <div className="headeramount1">{getTeamOrFamilyTerm()}</div>
-                            <div className="headeramount2">Сумма</div>
+                        <div className={`table-header ${tournamentType === 'PUBG' ? 'pubg-header' : 'default-header'}`}>
+                            {tournamentType === 'PUBG' ? (
+                                <React.Fragment>
+                                    <div className="headeramount1 pubg-header-place">Место</div>
+                                    <div className="headeramount1 pubg-header-team">{getTeamOrFamilyTerm()}</div>
+                                    <div className="headeramount2 pubg-header-amount">Сумма</div>
+                                </React.Fragment>
+                            ) : (
+                                <React.Fragment>
+                                    <div className="headeramount1 default-header-team">{getTeamOrFamilyTerm()}</div>
+                                    <div className="headeramount2 default-header-amount">Сумма</div>
+                                </React.Fragment>
+                            )}
                         </div>
-                        {sortedFamilies.map(family => (
-                            <div key={family.id} className="family-row">
-                                <div className="family-name" style={{
-                                    fontFamily: "'Readex Pro', sans-serif"
-                                }}>
-                                    {family.name}
+                        
+                        {tournamentType === 'PUBG' ? (
+                            staticPUBGData.map((item, index) => (
+                                <div key={index} className="family-row pubg-row" style={{ backgroundColor: item.backgroundColor }}>
+                                    <div className="place-column">
+                                        <img src={item.icon} alt={`Top ${item.place}`} className="place-icon" />
+                                    </div>
+                                    <div className="family-name">
+                                        <input
+                                            type="text"
+                                            value={item.name}
+                                            onChange={(e) => updatePUBGTeam(index, 'name', e.target.value)}
+                                            placeholder="Введите название команды"
+                                            className="pubg-team-input"
+                                        />
+                                    </div>
+                                    <div className="amount">
+                                        <div className="pubg-amount-container">
+                                            {item.bonusAmount > 0 && (
+                                                <React.Fragment>
+                                                    <span className="pubg-bonus-amount">{item.bonusAmount.toLocaleString()}</span>
+                                                    <img src="src/Coin Logo.svg" alt="Coin" className="coin-logo" />
+                                                    <span className="pubg-plus-sign">+</span>
+                                                </React.Fragment>
+                                            )}
+                                            <input
+                                                type="text"
+                                                value={formatNumber(item.amount)}
+                                                onChange={(e) => {
+                                                    const value = e.target.value.replace(/\D/g, '');
+                                                    if (value.length <= 6) {
+                                                        updatePUBGTeam(index, 'amount', value);
+                                                    }
+                                                }}
+                                                placeholder="Сумма"
+                                                className="pubg-amount-input"
+                                            />
+                                            <span className="currency">$</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="amount" style={{
-                                    fontFamily: "'Readex Pro', sans-serif"
-                                }}>
-                                    {family.amount.toLocaleString()}
-                                    <span className="currency"> $</span>
+                            ))
+                        ) : (
+                            sortedFamilies.map(family => (
+                                <div key={family.id} className="family-row">
+                                    <div className="family-name">
+                                        {family.name}
+                                    </div>
+                                    <div className="amount">
+                                        {family.amount.toLocaleString()}
+                                        <span className="currency">$</span>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))
+                        )}
                     </div>
                 
                     <div className="logo-container">
@@ -159,41 +250,44 @@
                         <button onClick={takeScreenshot}>Сделать скриншот</button>
                     </div>
 
-                    {!showBulkAdd ? (
-                        <form className="add-form" onSubmit={addFamily}>
-                            <input placeholder={getTeamOrFamilyTerm()} value={newFamily.name} onChange={e => setNewFamily({
-                                ...newFamily,
-                                name: e.target.value
-                            })} />
-                            <input type="number" placeholder="Сумма" value={newFamily.amount} onChange={e => setNewFamily({
-                                ...newFamily,
-                                amount: Number(e.target.value)
-                            })} />
-                            <button type="submit">Добавить</button>
-                            <button type="button" onClick={() => setShowBulkAdd(true)}>
-                                Массовое добавление
-                            </button>
-                            <button type="button" onClick={clearAllFamilies}>
-                                Массовое удаление
-                            </button>
-
-                        </form>
-
-                    ) : (
-                        <div className="bulk-add">
-                            <textarea placeholder={"Имена " + getTeamOrFamilyTerm().toLowerCase() + " (каждое с новой строки)"} value={bulkNames} onChange={e => setBulkNames(e.target.value)} />
-                            <textarea placeholder="Суммы (каждая с новой строки)" value={bulkAmounts} onChange={e => setBulkAmounts(e.target.value)} />
-                            <div className="bulk-add-buttons">
-                                <button onClick={handleBulkAdd}>Добавить {getTeamOrFamilyTerm().toLowerCase()}</button>
-                                <button onClick={() => setShowBulkAdd(false)}>Отмена</button>
+                    {tournamentType !== 'PUBG' && (
+                        !showBulkAdd ? (
+                            <form className="add-form" onSubmit={addFamily}>
+                                <input placeholder={getTeamOrFamilyTerm()} value={newFamily.name} onChange={e => setNewFamily({
+                                    ...newFamily,
+                                    name: e.target.value
+                                })} />
+                                <input type="number" placeholder="" value={newFamily.amount} onChange={e => setNewFamily({
+                                    ...newFamily,
+                                    amount: Number(e.target.value)
+                                })} />
+                                <button type="submit">Добавить</button>
+                                <button type="button" onClick={() => setShowBulkAdd(true)}>
+                                    Массовое добавление
+                                </button>
+                                <button type="button" onClick={clearAllFamilies}>
+                                    Массовое удаление
+                                </button>
+                            </form>
+                        ) : (
+                            <div className="bulk-add">
+                                <textarea placeholder={"Имена " + getTeamOrFamilyTerm().toLowerCase() + " (каждое с новой строки)"} value={bulkNames} onChange={e => setBulkNames(e.target.value)} />
+                                <textarea placeholder="Суммы (каждая с новой строки)" value={bulkAmounts} onChange={e => setBulkAmounts(e.target.value)} />
+                                <div className="bulk-add-buttons">
+                                    <button onClick={handleBulkAdd}>Добавить {getTeamOrFamilyTerm().toLowerCase()}</button>
+                                    <button onClick={() => setShowBulkAdd(false)}>Отмена</button>
+                                </div>
                             </div>
-                        </div>
+                        )
                     )}
                     <div className="screenshot-exclude">
-                    <button onClick={toggleTournamentType}>
-                        Сменить турнир на: {tournamentType === 'FAMILY' ? 'WEEKLY CUP' : 'FAMILY TOURNAMENT'}
-                    </button>
-                </div>
+                        <button onClick={toggleTournamentType}>
+                            Сменить турнир на: {
+                                tournamentType === 'FAMILY' ? 'WEEKLY CUP' :
+                                tournamentType === 'WEEKLY' ? 'PUBG TOURNAMENT' : 'FAMILY TOURNAMENT'
+                            }
+                        </button>
+                    </div>
                 </div>
             );
         }
