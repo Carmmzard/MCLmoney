@@ -63,19 +63,26 @@ h1 {
   border-radius: 16px;
   overflow: hidden;
   margin-top: 20px;
-  padding: 0 30px;
+  padding: 0;
 }
 
 .table-header {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  padding: 15px;
+  padding: 15px 0;
   color: #888;
   margin-bottom: 15px;
-  border-radius: 16px;
-  font-weight: bold;
+  font-weight: 500;
   font-family: 'Readex Pro', sans-serif;
-  font-size: 25px;
+  font-size: 20px;
+}
+
+.pubg-header {
+  grid-template-columns: 80px 1fr 250px;
+  padding: 0 15px;
+}
+
+.default-header {
+  grid-template-columns: 2fr 1fr;
 }
 
 .family-row {
@@ -85,8 +92,8 @@ h1 {
   margin-bottom: 15px;
   background: #1e1e1e;
   border-radius: 16px;
-  margin-left: 10px;
-  margin-right: 20px;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .family-row:last-child {
@@ -96,43 +103,59 @@ h1 {
 .amount {
   text-align: right;
   color: #9C9C9C;
-  padding-right: 10px;
   font-size: 20px;
-  font-family: 'Readex Pro Medium', sans-serif;
+  font-family: 'Readex Pro', sans-serif;
   font-weight: 500;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 15px;
+}
+
+.family-row:not(.pubg-row) .amount {
+  padding-right: 15px;
+}
+
+.pubg-row .amount {
+  padding-right: 10px;
 }
 
 .family-name {
-  padding-left: 10px;
+  padding-left: 15px;
   color: #FFFFFF;
   font-size: 20px;
-  font-family: 'Readex Pro Medium', sans-serif;
+  font-family: 'Readex Pro', sans-serif;
   font-weight: 500;
 }
 
 .headeramount1 {
   color: #9C9C9C;
-  padding-left: 15px;
   font-size: 20px;
-  font-family: 'Readex Pro Medium', sans-serif;
+  font-family: 'Readex Pro', sans-serif;
   font-weight: 500;
 }
 
 .headeramount2 {
-  padding-left: 148px;
   color: #9C9C9C;
   font-size: 20px;
-  font-family: 'Readex Pro Medium', sans-serif;
+  font-family: 'Readex Pro', sans-serif;
   font-weight: 500;
+}
+
+.currency {
+  font-size: 20px;
+  color: #69F129;
+  font-family: 'Readex Pro', sans-serif;
+  font-weight: 500;
+  margin-left: 6px;
+  display: inline-flex;
+  align-items: center;
+  transform: translateY(-1px);
 }
 
 .amount .currency {
-  font-size: 20px;
-  color: #69F129;
-  font-family: 'Readex Pro Medium', sans-serif;
-  font-weight: 500;
+  margin-left: 6px;
 }
-
 
 .actions {
   display: flex;
@@ -226,3 +249,115 @@ input::-webkit-outer-spin-button,
         background: #0a377e;
         margin: 0;
     }
+
+.pubg-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 250px;
+  gap: 0;
+  align-items: center;
+  padding: 15px;
+  margin-bottom: 15px;
+  background: #1e1e1e;
+  border-radius: 16px;
+}
+
+.place-column {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 0;
+}
+
+.place-icon {
+    width: 32px;
+    height: 32px;
+}
+
+.coin-logo {
+    width: 20px;
+    height: 20px;
+    margin: 0 2px;
+    transform: translateY(-1px);
+}
+
+.pubg-amount-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 15px;
+}
+
+.pubg-bonus-amount {
+  display: inline-flex;
+  align-items: center;
+  transform: translateY(-1px);
+  margin-right: 4px;
+}
+
+.pubg-amount-input {
+  background: transparent;
+  border: none;
+  color: #9C9C9C;
+  width: 80px;
+  text-align: right;
+  font-size: 20px;
+  font-family: 'Readex Pro', sans-serif;
+  font-weight: 500;
+  padding: 0;
+  margin-left: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.pubg-team-input {
+  background: transparent;
+  border: none;
+  color: inherit;
+  width: 100%;
+  font-size: 20px;
+  font-family: 'Readex Pro', sans-serif;
+  font-weight: 500;
+  padding-left: 0;
+}
+
+.pubg-plus-sign {
+  color: #9C9C9C;
+  font-size: 20px;
+  font-family: 'Readex Pro', sans-serif;
+  font-weight: 500;
+  margin-right: 2px;
+  margin-left: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.pubg-header-place {
+  text-align: center;
+  padding-left: 0;
+}
+
+.pubg-header-team {
+  padding-left: 15px;
+}
+
+.pubg-header-amount {
+  text-align: right;
+  padding-right: 15px;
+}
+
+.default-header-team {
+  padding-left: 15px;
+}
+
+.default-header-amount {
+  text-align: right;
+  padding-right: 15px;
+}
+
+.main-title {
+  font-family: 'Krona One', sans-serif;
+}
+
+.family-row:not(.pubg-row) .family-name {
+  padding-left: 15px;
+}
