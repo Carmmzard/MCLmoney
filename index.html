@@ -3,10 +3,6 @@
 <head>
     <title>WINNER: FAMILY TOURNAMENT</title>
     <link rel="stylesheet" href="src/index.css">
-    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -17,7 +13,19 @@
 
 <body>
     <div id="root"></div>
+    
+    <!-- Загружаем скрипты в правильном порядке -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
     <script type="text/babel">
+        // Проверяем, что React и ReactDOM загружены
+        if (typeof React === 'undefined' || typeof ReactDOM === 'undefined') {
+            console.error('React или ReactDOM не загружены');
+        }
+
         function App() {
             const [families, setFamilies] = React.useState([]);
             const [showBulkAdd, setShowBulkAdd] = React.useState(false);
@@ -291,7 +299,13 @@
                 </div>
             );
         }
-        ReactDOM.render(< App />, document.getElementById('root'));
+
+        // Оборачиваем рендер в try-catch для отлова ошибок
+        try {
+            ReactDOM.render(<App />, document.getElementById('root'));
+        } catch (error) {
+            console.error('Ошибка при рендеринге:', error);
+        }
     </script>
 </body>
 </html>
